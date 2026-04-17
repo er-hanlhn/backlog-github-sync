@@ -1,0 +1,25 @@
+{
+  "name": "backlog-github-sync",
+  "version": "1.0.0",
+  "description": "One-way sync from Nulab Backlog to GitHub Projects V2",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "test": "node --test dist/__tests__/**/*.test.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["backlog", "github", "sync", "projects"],
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/graphql": "^8.0.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.5.0"
+  }
+}

@@ -1,0 +1,58 @@
+# Field mapping configuration for Backlog -> GitHub Projects V2 sync
+#
+# Maps Backlog ticket fields to GitHub Project V2 custom fields.
+# Project fields must be created manually in GitHub first.
+# Field IDs and option IDs are auto-discovered by name at runtime.
+#
+# Supported types: single_select, text, date, number
+# For single_select fields, provide a value_map to translate Backlog values
+# to Project field option names.
+
+fields:
+  # Backlog status -> Project "Status" single-select field
+  - backlog_field: "status"
+    project_field: "Status"
+    type: "single_select"
+    value_map:
+      "Open": "Todo"
+      "In Progress": "In Progress"
+      "Resolved": "Done"
+      "Closed": "Done"
+      # Japanese statuses
+      # "未対応": "Todo"
+      # "処理中": "In Progress"
+      # "処理済み": "Done"
+      # "完了": "Done"
+
+  # Backlog priority -> Project "Priority" single-select field
+  - backlog_field: "priority"
+    project_field: "Priority"
+    type: "single_select"
+    value_map:
+      "High": "High"
+      "Normal": "Medium"
+      "Low": "Low"
+      # Japanese priorities
+      # "高": "High"
+      # "中": "Medium"
+      # "低": "Low"
+
+  # Backlog assignee -> Project "Backlog Assignee" text field
+  - backlog_field: "assignee"
+    project_field: "Backlog Assignee"
+    type: "text"
+
+  # Backlog due date -> Project "Due Date" date field
+  - backlog_field: "dueDate"
+    project_field: "Due Date"
+    type: "date"
+
+  # Backlog issue key -> Project "Backlog Key" text field
+  - backlog_field: "issueKey"
+    project_field: "Backlog Key"
+    type: "text"
+
+  # Backlog URL -> Project "Backlog URL" text field
+  - backlog_field: "url"
+    project_field: "Backlog URL"
+    type: "text"

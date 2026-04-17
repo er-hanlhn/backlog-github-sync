@@ -1,0 +1,36 @@
+name: 'Backlog to GitHub Projects Sync'
+description: 'One-way sync from Nulab Backlog tickets to GitHub Projects V2 draft items'
+inputs:
+  backlog-space:
+    description: 'Backlog space name (e.g., "mycompany" for mycompany.backlog.com)'
+    required: true
+  backlog-domain:
+    description: 'Backlog domain: "backlog.com" or "backlog.jp"'
+    required: false
+    default: 'backlog.com'
+  backlog-api-key:
+    description: 'Backlog API key'
+    required: true
+  backlog-project-id:
+    description: 'Backlog project ID (numeric)'
+    required: true
+  github-token:
+    description: 'GitHub PAT with repo + project scopes'
+    required: true
+  project-owner:
+    description: 'GitHub Project V2 owner (user or org login)'
+    required: true
+  project-number:
+    description: 'GitHub Project V2 number'
+    required: true
+  field-mapping-path:
+    description: 'Path to field mapping YAML config'
+    required: false
+    default: 'config/field-mapping.yml'
+  initial-sync-hours:
+    description: 'Hours to look back on first sync run'
+    required: false
+    default: '720'
+runs:
+  using: 'node20'
+  main: 'dist/src/index.js'

@@ -1,0 +1,52 @@
+name: Backlog to GitHub Projects Sync
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: backlog-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Run sync
+        run: node dist/src/index.js
+        env:
+          BACKLOG_SPACE: ${{ secrets.BACKLOG_SPACE }}
+          BACKLOG_DOMAIN: ${{ secrets.BACKLOG_DOMAIN }}
+          BACKLOG_API_KEY: ${{ secrets.BACKLOG_API_KEY }}
+          BACKLOG_PROJECT_ID: ${{ secrets.BACKLOG_PROJECT_ID }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
+          GITHUB_PROJECT_OWNER: ${{ vars.PROJECT_OWNER }}
+          GITHUB_PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          FIELD_MAPPING_PATH: config/field-mapping.yml
+          INITIAL_SYNC_HOURS: ${{ vars.INITIAL_SYNC_HOURS || '720' }}
+
+      - name: Commit sync state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase
+          git diff --quiet .sync-state.json || (
+            git add .sync-state.json &&
+            git commit -m "chore: update sync state" &&
+            git push
+          )
