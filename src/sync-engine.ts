@@ -56,10 +56,9 @@ async function syncTicket(
   let action: 'created' | 'updated'
 
   if (existingItemId) {
-    await updateDraftIssue(githubDeps, projectId, existingItemId, title, body)
-    itemId = existingItemId
+    itemId = await updateDraftIssue(githubDeps, projectId, existingItemId, title, body)
     action = 'updated'
-    logger.info(`Updated: ${issue.issueKey}`)
+    logger.info(`Updated: ${issue.issueKey} -> ${itemId}`)
   } else {
     itemId = await addDraftIssue(githubDeps, projectId, title, body)
     action = 'created'

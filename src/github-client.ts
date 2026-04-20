@@ -189,19 +189,15 @@ export async function addDraftIssue(
   return itemId
 }
 
-// ── Update draft issue content ──
+// ── Update draft issue (delete + recreate) ──
 
-const UPDATE_DRAFT_ISSUE = `
-  mutation($projectId: ID!, $itemId: ID!, $title: String, $body: String) {
-    updateProjectV2DraftIssue(input: {
+const DELETE_PROJECT_ITEM = `
+  mutation($projectId: ID!, $itemId: ID!) {
+    deleteProjectV2Item(input: {
       projectId: $projectId
-      draftIssueId: $itemId
-      title: $title
-      body: $body
+      itemId: $itemId
     }) {
-      projectV2Item {
-        id
-      }
+      deletedItemId
     }
   }
 `
@@ -212,46 +208,15 @@ export async function updateDraftIssue(
   itemId: string,
   title: string,
   body: string
-): Promise<void> {
+): Promise<string> {
   const gql = createGraphqlClient(deps.token)
 
-  // We need the draft issue ID, not the item ID.
-  // First get the draft issue ID from the item.
-  const draftId = await getDraftIssueId(deps, itemId)
-
-  await gql(UPDATE_DRAFT_ISSUE, {
-    projectId,
-    itemId: draftId,
-    title,
-    body,
-  })
-  logger.debug(`Updated draft issue: ${title}`)
-}
-
-// ── Get draft issue ID from item ──
-
-const GET_ITEM_CONTENT = `
-  query($itemId: ID!) {
-    node(id: $itemId) {
-      ... on ProjectV2Item {
-        content {
-          ... on DraftIssue {
-            id
-          }
-        }
-      }
-    }
-  }
-`
-
-interface GetItemContentResponse {
-  node: { content: { id: string } }
-}
-
-async function getDraftIssueId(deps: GitHubClientDeps, itemId: string): Promise<string> {
-  const gql = createGraphqlClient(deps.token)
-  const result = await gql<GetItemContentResponse>(GET_ITEM_CONTENT, { itemId })
-  return result.node.content.id
+  // GitHub API has no updateProjectV2DraftIssue mutation.
+  // Delete the old item and create a new one.
+  await gql(DELETE_PROJECT_ITEM, { projectId, itemId })
+  const newItemId = await addDraftIssue(deps, projectId, title, body)
+  logger.debug(`Recreated draft issue: ${title} -> ${newItemId}`)
+  return newItemId
 }
 
 // ── Update project item field value ──
