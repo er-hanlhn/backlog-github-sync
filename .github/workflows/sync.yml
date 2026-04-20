@@ -44,7 +44,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git stash --include-untracked
           git pull --rebase
+          git stash pop || true
           git diff --quiet .sync-state.json || (
             git add .sync-state.json &&
             git commit -m "chore: update sync state" &&
