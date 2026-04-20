@@ -160,7 +160,7 @@ const ADD_DRAFT_ISSUE = `
       title: $title
       body: $body
     }) {
-      projectV2Item {
+      projectItem {
         id
       }
     }
@@ -168,7 +168,7 @@ const ADD_DRAFT_ISSUE = `
 `
 
 interface AddDraftIssueResponse {
-  addProjectV2DraftIssue: { projectV2Item: { id: string } }
+  addProjectV2DraftIssue: { projectItem: { id: string } }
 }
 
 export async function addDraftIssue(
@@ -184,7 +184,7 @@ export async function addDraftIssue(
     body,
   })
 
-  const itemId = result.addProjectV2DraftIssue.projectV2Item.id
+  const itemId = result.addProjectV2DraftIssue.projectItem.id
   logger.debug(`Created draft issue: ${title} -> ${itemId}`)
   return itemId
 }
