@@ -57,6 +57,7 @@ jobs:
           SYNC_MODE: issues
           FIELD_MAPPING_PATH: ${{ matrix.project.field_mapping }}
           INITIAL_SYNC_HOURS: ${{ vars.INITIAL_SYNC_HOURS || '720' }}
+          MAX_ISSUES_PER_RUN: ${{ vars.MAX_ISSUES_PER_RUN || '500' }}
 
       - name: Commit sync state
         run: |
