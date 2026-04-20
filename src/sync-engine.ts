@@ -17,7 +17,6 @@ import {
 import {
   createIssue,
   updateIssue,
-  closeIssue,
   createIssuesClientDeps,
 } from './github-issues-client.js'
 import { getOrCreateMilestone } from './github-milestones.js'
@@ -235,15 +234,8 @@ export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Pro
 
   if (webhook) {
     if (webhook.action === 'delete') {
-      // Handle delete: close the GitHub issue
-      const existing = state.issueMap[webhook.issueKey]
-      if (existing && config.syncMode === 'issues') {
-        const issuesDeps = createIssuesClientDeps(config)
-        await closeIssue(issuesDeps, existing.issueNumber)
-        logger.info(`Closed issue for deleted Backlog ticket: ${webhook.issueKey}`)
-      }
-      saveState(STATE_FILE, state)
-      return { created: 0, updated: 0, failed: 0, skipped: 0, total: 1 }
+      logger.info(`Ignoring delete event for ${webhook.issueKey} (one-way sync)`)
+      return { created: 0, updated: 0, failed: 0, skipped: 1, total: 1 }
     }
 
     // Fetch single issue for create/update

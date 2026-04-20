@@ -113,21 +113,6 @@ export async function updateIssue(
   logger.debug(`Updated issue #${issueNumber} in ${deps.owner}/${deps.repo}`)
 }
 
-export async function closeIssue(
-  deps: IssuesClientDeps,
-  issueNumber: number
-): Promise<void> {
-  const url = `https://api.github.com/repos/${deps.owner}/${deps.repo}/issues/${issueNumber}`
-
-  await fetchWithRetry(url, {
-    method: 'PATCH',
-    headers: headers(deps.token),
-    body: JSON.stringify({ state: 'closed' }),
-  })
-
-  logger.debug(`Closed issue #${issueNumber}`)
-}
-
 export function createIssuesClientDeps(config: SyncConfig): IssuesClientDeps {
   return {
     token: config.githubToken,

@@ -92,27 +92,6 @@ export async function fetchSingleIssue(
   return (await response.json()) as BacklogIssue
 }
 
-export async function updateIssueStatus(
-  config: BacklogClientDeps,
-  issueIdOrKey: string,
-  statusId: number
-): Promise<void> {
-  const baseUrl = buildBaseUrl(config)
-  const url = `${baseUrl}/issues/${issueIdOrKey}?apiKey=${config.apiKey}`
-  const response = await fetchWithRetry(url, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `statusId=${statusId}`,
-  })
-
-  if (!response.ok) {
-    const body = await response.text().catch(() => '')
-    throw new Error(`Failed to update Backlog issue status: ${response.status} ${body}`)
-  }
-
-  logger.info(`Updated Backlog issue ${issueIdOrKey} status to ${statusId}`)
-}
-
 export function buildBacklogUrl(config: BacklogClientDeps, issueKey: string): string {
   return `https://${config.space}.${config.domain}/view/${issueKey}`
 }
