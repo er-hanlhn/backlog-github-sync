@@ -1,9 +1,10 @@
 import { loadSyncConfig } from './config.js'
 import { runSync } from './sync-engine.js'
+import { isWebhookTrigger, parseWebhookPayload } from './webhook-handler.js'
 import { logger } from './logger.js'
 
 async function main(): Promise<void> {
-  logger.info('Starting Backlog -> GitHub Projects V2 sync')
+  logger.info('Starting Backlog -> GitHub sync')
 
   const config = loadSyncConfig()
 
@@ -12,10 +13,25 @@ async function main(): Promise<void> {
     domain: config.backlogDomain,
     projectOwner: config.projectOwner,
     projectNumber: config.projectNumber,
-    fieldMappingPath: config.fieldMappingPath,
+    syncMode: config.syncMode,
+    issuesRepo: config.syncMode === 'issues' ? `${config.issuesOwner}/${config.issuesRepo}` : 'N/A',
   })
 
-  const result = await runSync(config)
+  // Validate issues mode config
+  if (config.syncMode === 'issues' && (!config.issuesOwner || !config.issuesRepo)) {
+    throw new Error('GITHUB_ISSUES_OWNER and GITHUB_ISSUES_REPO are required when SYNC_MODE=issues')
+  }
+
+  // Detect trigger mode
+  const webhook = isWebhookTrigger() ? parseWebhookPayload() : undefined
+
+  if (webhook) {
+    logger.info(`Webhook trigger: ${webhook.action} ${webhook.issueKey}`)
+  } else {
+    logger.info('Polling trigger (cron/manual)')
+  }
+
+  const result = await runSync(config, webhook ?? undefined)
 
   logger.info('Sync finished', {
     created: result.created,

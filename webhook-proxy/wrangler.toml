@@ -1,0 +1,11 @@
+name = "backlog-github-webhook-proxy"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Set these via `wrangler secret put`:
+#   wrangler secret put GITHUB_TOKEN
+#   wrangler secret put WEBHOOK_SECRET (optional)
+#
+# Set these as environment variables:
+[vars]
+GITHUB_REPO = "er-hanlhn/backlog-github-sync"

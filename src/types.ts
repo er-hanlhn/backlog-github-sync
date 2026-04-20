@@ -5,9 +5,11 @@ export interface BacklogIssue {
   readonly issueKey: string
   readonly summary: string
   readonly description: string | null
+  readonly issueType: { readonly id: number; readonly name: string }
   readonly status: { readonly id: number; readonly name: string }
   readonly priority: { readonly id: number; readonly name: string }
   readonly assignee: { readonly id: number; readonly name: string } | null
+  readonly parentIssueId: number | null
   readonly dueDate: string | null
   readonly created: string
   readonly updated: string
@@ -16,7 +18,13 @@ export interface BacklogIssue {
   readonly category: ReadonlyArray<{ readonly id: number; readonly name: string }>
 }
 
-// ── GitHub Projects V2 types ──
+// ── GitHub types ──
+
+export interface GitHubIssueRef {
+  readonly id: number
+  readonly issueNumber: number
+  readonly nodeId: string
+}
 
 export type ProjectFieldType = 'single_select' | 'text' | 'date' | 'number'
 
@@ -41,12 +49,18 @@ export interface ProjectFieldValue {
 // ── State ──
 
 export interface SyncState {
+  readonly version: 2
   readonly lastPolledAt: string | null
+  readonly issueMap: Readonly<Record<string, GitHubIssueRef>>
   readonly projectItemMap: Readonly<Record<string, string>>
   readonly projectFieldIds: Readonly<Record<string, ProjectField>>
+  readonly milestoneMap: Readonly<Record<string, number>>
+  readonly labelMap: Readonly<Record<string, string>>
 }
 
 // ── Config ──
+
+export type SyncMode = 'draft' | 'issues'
 
 export interface FieldMappingEntry {
   readonly backlog_field: string
@@ -67,6 +81,9 @@ export interface SyncConfig {
   readonly githubToken: string
   readonly projectOwner: string
   readonly projectNumber: number
+  readonly issuesOwner: string
+  readonly issuesRepo: string
+  readonly syncMode: SyncMode
   readonly fieldMappingPath: string
   readonly initialSyncHours: number
   readonly maxIssuesPerRun: number
@@ -81,4 +98,13 @@ export interface SyncResult {
   readonly failed: number
   readonly skipped: number
   readonly total: number
+}
+
+// ── Webhook ──
+
+export type WebhookAction = 'create' | 'update' | 'delete'
+
+export interface WebhookPayload {
+  readonly action: WebhookAction
+  readonly issueKey: string
 }

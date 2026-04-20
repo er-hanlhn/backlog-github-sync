@@ -219,6 +219,41 @@ export async function updateDraftIssue(
   return newItemId
 }
 
+// ── Add existing issue to project ──
+
+const ADD_ITEM_BY_ID = `
+  mutation($projectId: ID!, $contentId: ID!) {
+    addProjectV2ItemById(input: {
+      projectId: $projectId
+      contentId: $contentId
+    }) {
+      item {
+        id
+      }
+    }
+  }
+`
+
+interface AddItemByIdResponse {
+  addProjectV2ItemById: { item: { id: string } }
+}
+
+export async function addIssueToProject(
+  deps: GitHubClientDeps,
+  projectId: string,
+  issueNodeId: string
+): Promise<string> {
+  const gql = createGraphqlClient(deps.token)
+  const result = await gql<AddItemByIdResponse>(ADD_ITEM_BY_ID, {
+    projectId,
+    contentId: issueNodeId,
+  })
+
+  const itemId = result.addProjectV2ItemById.item.id
+  logger.debug(`Added issue to project: ${issueNodeId} -> ${itemId}`)
+  return itemId
+}
+
 // ── Update project item field value ──
 
 const UPDATE_FIELD_SINGLE_SELECT = `

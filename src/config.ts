@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs'
 import * as yaml from 'js-yaml'
 import { logger } from './logger.js'
-import type { SyncConfig, FieldMappingConfig, FieldMappingEntry } from './types.js'
+import type { SyncConfig, SyncMode, FieldMappingConfig, FieldMappingEntry } from './types.js'
 
 function requireEnv(name: string): string {
   const value = process.env[name]
@@ -24,6 +24,9 @@ export function loadSyncConfig(): SyncConfig {
     githubToken: requireEnv('GITHUB_TOKEN'),
     projectOwner: requireEnv('GITHUB_PROJECT_OWNER'),
     projectNumber: parseInt(requireEnv('GITHUB_PROJECT_NUMBER'), 10),
+    issuesOwner: optionalEnv('GITHUB_ISSUES_OWNER', ''),
+    issuesRepo: optionalEnv('GITHUB_ISSUES_REPO', ''),
+    syncMode: optionalEnv('SYNC_MODE', 'draft') as SyncMode,
     fieldMappingPath: optionalEnv('FIELD_MAPPING_PATH', 'config/field-mapping.yml'),
     initialSyncHours: parseInt(optionalEnv('INITIAL_SYNC_HOURS', '720'), 10),
     maxIssuesPerRun: parseInt(optionalEnv('MAX_ISSUES_PER_RUN', '500'), 10),
