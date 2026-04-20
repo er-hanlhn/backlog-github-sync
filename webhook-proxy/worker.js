@@ -55,6 +55,7 @@ export default {
             Authorization: `token ${env.GITHUB_TOKEN}`,
             Accept: 'application/vnd.github+json',
             'Content-Type': 'application/json',
+            'User-Agent': 'backlog-github-webhook-proxy',
           },
           body: JSON.stringify({
             event_type: 'backlog-webhook',

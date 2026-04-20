@@ -3,7 +3,7 @@
     "name": "test-project",
     "backlog_project_id": "163881",
     "issues_owner": "er-hanlhn",
-    "issues_repo": "hanlhn-team",
+    "issues_repo": "backlog-github-sync-repo",
     "project_number": "2",
     "field_mapping": "config/field-mapping.yml"
   }
