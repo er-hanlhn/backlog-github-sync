@@ -61,6 +61,36 @@ function headers(token: string): Record<string, string> {
   }
 }
 
+export async function findExistingIssue(
+  deps: IssuesClientDeps,
+  issueKey: string
+): Promise<GitHubIssueRef | null> {
+  const query = encodeURIComponent(`repo:${deps.owner}/${deps.repo} in:title [${issueKey}]`)
+  const url = `https://api.github.com/search/issues?q=${query}&per_page=1`
+
+  const response = await fetchWithRetry(url, {
+    method: 'GET',
+    headers: headers(deps.token),
+  })
+
+  const data = (await response.json()) as {
+    readonly total_count: number
+    readonly items: ReadonlyArray<GitHubIssueResponse>
+  }
+
+  if (data.total_count > 0) {
+    const match = data.items[0]
+    logger.info(`Found existing issue for ${issueKey}: #${match.number}`)
+    return {
+      id: match.id,
+      issueNumber: match.number,
+      nodeId: match.node_id,
+    }
+  }
+
+  return null
+}
+
 export async function createIssue(
   deps: IssuesClientDeps,
   params: CreateIssueParams

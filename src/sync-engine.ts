@@ -17,6 +17,7 @@ import {
 import {
   createIssue,
   updateIssue,
+  findExistingIssue,
   createIssuesClientDeps,
 } from './github-issues-client.js'
 import { getOrCreateMilestone } from './github-milestones.js'
@@ -154,7 +155,18 @@ async function syncTicketIssue(
     currentState = msResult.updatedState
   }
 
-  const existing = currentState.issueMap[issue.issueKey]
+  let existing = currentState.issueMap[issue.issueKey]
+
+  // Dedup: if not in state, search GitHub for an existing issue by title
+  if (!existing) {
+    const found = await findExistingIssue(issuesDeps, issue.issueKey)
+    if (found) {
+      currentState = setIssueMapping(currentState, issue.issueKey, found)
+      existing = found
+      logger.info(`Recovered existing issue: ${issue.issueKey} -> #${found.issueNumber}`)
+    }
+  }
+
   let action: 'created' | 'updated'
 
   if (existing) {
