@@ -19,7 +19,7 @@ async function main(): Promise<void> {
 
   // Validate issues mode config
   if (config.syncMode === 'issues' && (!config.issuesOwner || !config.issuesRepo)) {
-    throw new Error('GITHUB_ISSUES_OWNER and GITHUB_ISSUES_REPO are required when SYNC_MODE=issues')
+    throw new Error('ISSUES_OWNER and ISSUES_REPO are required when SYNC_MODE=issues')
   }
 
   // Detect trigger mode

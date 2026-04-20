@@ -1,5 +1,5 @@
 name: 'Backlog to GitHub Projects Sync'
-description: 'One-way sync from Nulab Backlog tickets to GitHub Projects V2 draft items'
+description: 'Sync Nulab Backlog tickets to GitHub Issues + Projects V2 with hierarchy support'
 inputs:
   backlog-space:
     description: 'Backlog space name (e.g., "mycompany" for mycompany.backlog.com)'
@@ -23,6 +23,16 @@ inputs:
   project-number:
     description: 'GitHub Project V2 number'
     required: true
+  issues-owner:
+    description: 'GitHub repo owner for creating issues'
+    required: false
+  issues-repo:
+    description: 'GitHub repo name for creating issues'
+    required: false
+  sync-mode:
+    description: 'Sync mode: "issues" (real GitHub Issues) or "draft" (Project V2 draft items)'
+    required: false
+    default: 'issues'
   field-mapping-path:
     description: 'Path to field mapping YAML config'
     required: false

@@ -36,8 +36,8 @@ jobs:
           BACKLOG_API_KEY: ${{ secrets.BACKLOG_API_KEY }}
           BACKLOG_PROJECT_ID: ${{ secrets.BACKLOG_PROJECT_ID }}
           GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
-          GITHUB_PROJECT_OWNER: ${{ vars.PROJECT_OWNER }}
-          GITHUB_PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
-          GITHUB_ISSUES_OWNER: er-hanlhn
-          GITHUB_ISSUES_REPO: hanlhn-team
+          PROJECT_OWNER: ${{ vars.PROJECT_OWNER }}
+          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
+          ISSUES_OWNER: er-hanlhn
+          ISSUES_REPO: hanlhn-team
           SYNC_MODE: issues
