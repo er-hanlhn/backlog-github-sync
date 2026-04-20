@@ -11,7 +11,12 @@
     "test": "node --test dist/__tests__/**/*.test.js",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": ["backlog", "github", "sync", "projects"],
+  "keywords": [
+    "backlog",
+    "github",
+    "sync",
+    "projects"
+  ],
   "license": "MIT",
   "dependencies": {
     "@octokit/graphql": "^8.0.0",
@@ -20,6 +25,7 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20.11.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.5.0"
   }
 }
