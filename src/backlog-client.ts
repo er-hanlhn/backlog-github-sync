@@ -55,7 +55,7 @@ export async function fetchUpdatedIssues(
   while (allIssues.length < maxIssues) {
     const params = new URLSearchParams({
       'projectId[]': config.projectId,
-      updatedSince: since,
+      updatedSince: since.split('T')[0],
       sort: 'updated',
       order: 'asc',
       count: String(MAX_PER_PAGE),
