@@ -1,5 +1,125 @@
 {
-  "lastPolledAt": null,
-  "projectItemMap": {},
-  "projectFieldIds": {}
+  "lastPolledAt": "2026-04-20T03:18:42.812Z",
+  "projectItemMap": {
+    "ESIM-2405": "PVTI_lAHOCsrOwc4BU4slzgqZz4I",
+    "ESIM-2160": "PVTI_lAHOCsrOwc4BU4slzgqZz40",
+    "ESIM-2404": "PVTI_lAHOCsrOwc4BU4slzgqZz5Y",
+    "ESIM-2397": "PVTI_lAHOCsrOwc4BU4slzgqZz5c",
+    "ESIM-2408": "PVTI_lAHOCsrOwc4BU4slzgqZz5s",
+    "ESIM-2386": "PVTI_lAHOCsrOwc4BU4slzgqZz6Q",
+    "ESIM-2337": "PVTI_lAHOCsrOwc4BU4slzgqZz64",
+    "ESIM-1729": "PVTI_lAHOCsrOwc4BU4slzgqZz7I",
+    "ESIM-2412": "PVTI_lAHOCsrOwc4BU4slzgqZz7U",
+    "ESIM-2407": "PVTI_lAHOCsrOwc4BU4slzgqZz7k",
+    "ESIM-2413": "PVTI_lAHOCsrOwc4BU4slzgqZz8E",
+    "ESIM-2411": "PVTI_lAHOCsrOwc4BU4slzgqZz8U",
+    "ESIM-2213": "PVTI_lAHOCsrOwc4BU4slzgqZz88",
+    "ESIM-2379": "PVTI_lAHOCsrOwc4BU4slzgqZz9w",
+    "ESIM-2375": "PVTI_lAHOCsrOwc4BU4slzgqZz-U",
+    "ESIM-2376": "PVTI_lAHOCsrOwc4BU4slzgqZz-w",
+    "ESIM-2382": "PVTI_lAHOCsrOwc4BU4slzgqZz_E",
+    "ESIM-2383": "PVTI_lAHOCsrOwc4BU4slzgqZz_o",
+    "ESIM-2393": "PVTI_lAHOCsrOwc4BU4slzgqZz_8",
+    "ESIM-2367": "PVTI_lAHOCsrOwc4BU4slzgqZ0Ao",
+    "ESIM-2390": "PVTI_lAHOCsrOwc4BU4slzgqZ0A4",
+    "ESIM-2392": "PVTI_lAHOCsrOwc4BU4slzgqZ0BY",
+    "ESIM-2395": "PVTI_lAHOCsrOwc4BU4slzgqZ0B4",
+    "ESIM-2401": "PVTI_lAHOCsrOwc4BU4slzgqZ0Cg",
+    "ESIM-2371": "PVTI_lAHOCsrOwc4BU4slzgqZ0Dc",
+    "ESIM-2372": "PVTI_lAHOCsrOwc4BU4slzgqZ0EQ",
+    "ESIM-2374": "PVTI_lAHOCsrOwc4BU4slzgqZ0FQ",
+    "ESIM-2410": "PVTI_lAHOCsrOwc4BU4slzgqZ0GM",
+    "ESIM-2377": "PVTI_lAHOCsrOwc4BU4slzgqZ0Go",
+    "ESIM-2378": "PVTI_lAHOCsrOwc4BU4slzgqZ0HI",
+    "ESIM-2400": "PVTI_lAHOCsrOwc4BU4slzgqZ0Hg",
+    "ESIM-2403": "PVTI_lAHOCsrOwc4BU4slzgqZ0IA",
+    "ESIM-2406": "PVTI_lAHOCsrOwc4BU4slzgqZ0Is",
+    "ESIM-2370": "PVTI_lAHOCsrOwc4BU4slzgqZ0JE",
+    "ESIM-2384": "PVTI_lAHOCsrOwc4BU4slzgqZ0JY",
+    "ESIM-2391": "PVTI_lAHOCsrOwc4BU4slzgqZ0Jw",
+    "ESIM-2394": "PVTI_lAHOCsrOwc4BU4slzgqZ0KM",
+    "ESIM-2396": "PVTI_lAHOCsrOwc4BU4slzgqZ0KY",
+    "ESIM-2361": "PVTI_lAHOCsrOwc4BU4slzgqZ0K4",
+    "ESIM-2363": "PVTI_lAHOCsrOwc4BU4slzgqZ0LM",
+    "ESIM-2364": "PVTI_lAHOCsrOwc4BU4slzgqZ0Lw",
+    "ESIM-2381": "PVTI_lAHOCsrOwc4BU4slzgqZ0MI",
+    "ESIM-2385": "PVTI_lAHOCsrOwc4BU4slzgqZ0M4",
+    "ESIM-2354": "PVTI_lAHOCsrOwc4BU4slzgqZ0NM",
+    "ESIM-2355": "PVTI_lAHOCsrOwc4BU4slzgqZ0No",
+    "ESIM-2359": "PVTI_lAHOCsrOwc4BU4slzgqZ0OI",
+    "ESIM-2360": "PVTI_lAHOCsrOwc4BU4slzgqZ0Ok",
+    "ESIM-2362": "PVTI_lAHOCsrOwc4BU4slzgqZ0PE",
+    "ESIM-2380": "PVTI_lAHOCsrOwc4BU4slzgqZ0Ps",
+    "ESIM-2369": "PVTI_lAHOCsrOwc4BU4slzgqZ0QE",
+    "ESIM-2387": "PVTI_lAHOCsrOwc4BU4slzgqZ0Qo",
+    "ESIM-2373": "PVTI_lAHOCsrOwc4BU4slzgqZ0RA",
+    "ESIM-2409": "PVTI_lAHOCsrOwc4BU4slzgqZ0Rs",
+    "ESIM-2414": "PVTI_lAHOCsrOwc4BU4slzgqZ0SE"
+  },
+  "projectFieldIds": {
+    "Title": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxRY",
+      "name": "Title",
+      "dataType": "TITLE"
+    },
+    "Assignees": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxRk",
+      "name": "Assignees",
+      "dataType": "ASSIGNEES"
+    },
+    "Status": {
+      "fieldId": "PVTSSF_lAHOCsrOwc4BU4slzhIlxR0",
+      "name": "Status",
+      "dataType": "SINGLE_SELECT",
+      "options": [
+        {
+          "id": "f75ad846",
+          "name": "Todo"
+        },
+        {
+          "id": "47fc9ee4",
+          "name": "In Progress"
+        },
+        {
+          "id": "98236657",
+          "name": "Done"
+        }
+      ]
+    },
+    "Labels": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxSA",
+      "name": "Labels",
+      "dataType": "LABELS"
+    },
+    "Linked pull requests": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxSM",
+      "name": "Linked pull requests",
+      "dataType": "LINKED_PULL_REQUESTS"
+    },
+    "Milestone": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxSg",
+      "name": "Milestone",
+      "dataType": "MILESTONE"
+    },
+    "Repository": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxSs",
+      "name": "Repository",
+      "dataType": "REPOSITORY"
+    },
+    "Reviewers": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxS4",
+      "name": "Reviewers",
+      "dataType": "REVIEWERS"
+    },
+    "Parent issue": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxTA",
+      "name": "Parent issue",
+      "dataType": "PARENT_ISSUE"
+    },
+    "Sub-issues progress": {
+      "fieldId": "PVTF_lAHOCsrOwc4BU4slzhIlxTQ",
+      "name": "Sub-issues progress",
+      "dataType": "SUB_ISSUES_PROGRESS"
+    }
+  }
 }
