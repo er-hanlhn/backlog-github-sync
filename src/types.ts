@@ -74,6 +74,7 @@ export interface FieldMappingConfig {
 }
 
 export interface SyncConfig {
+  readonly projectName: string
   readonly backlogSpace: string
   readonly backlogDomain: string
   readonly backlogApiKey: string

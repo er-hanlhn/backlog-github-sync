@@ -45,7 +45,9 @@ import type {
   WebhookPayload,
 } from './types.js'
 
-const STATE_FILE = '.sync-state.json'
+function stateFilePath(projectName: string): string {
+  return `.sync-state-${projectName}.json`
+}
 
 function computeSinceTimestamp(state: SyncState, config: SyncConfig): string {
   if (state.lastPolledAt) {
@@ -219,7 +221,8 @@ async function syncTicketIssue(
 
 export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Promise<SyncResult> {
   const syncStart = new Date().toISOString()
-  let state = loadState(STATE_FILE)
+  const stateFile = stateFilePath(config.projectName)
+  let state = loadState(stateFile)
 
   const githubDeps = createGitHubDeps(config)
   const backlogDeps = createBacklogDeps(config)
@@ -250,7 +253,7 @@ export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Pro
   if (issues.length === 0) {
     logger.info('No updated issues found')
     state = setLastPolledAt(state, syncStart)
-    saveState(STATE_FILE, state)
+    saveState(stateFile, state)
     return { created: 0, updated: 0, failed: 0, skipped: 0, total: 0 }
   }
 
@@ -330,7 +333,7 @@ export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Pro
   }
 
   state = setLastPolledAt(state, syncStart)
-  saveState(STATE_FILE, state)
+  saveState(stateFile, state)
 
   const result: SyncResult = {
     created,

@@ -17,6 +17,7 @@ function optionalEnv(name: string, fallback: string): string {
 
 export function loadSyncConfig(): SyncConfig {
   return {
+    projectName: requireEnv('PROJECT_NAME'),
     backlogSpace: requireEnv('BACKLOG_SPACE'),
     backlogDomain: optionalEnv('BACKLOG_DOMAIN', 'backlog.com'),
     backlogApiKey: requireEnv('BACKLOG_API_KEY'),

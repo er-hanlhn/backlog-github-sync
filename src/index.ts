@@ -8,11 +8,9 @@ async function main(): Promise<void> {
 
   const config = loadSyncConfig()
 
-  logger.info('Config loaded', {
+  logger.info(`Config loaded for project: ${config.projectName}`, {
+    project: config.projectName,
     space: config.backlogSpace,
-    domain: config.backlogDomain,
-    projectOwner: config.projectOwner,
-    projectNumber: config.projectNumber,
     syncMode: config.syncMode,
     issuesRepo: config.syncMode === 'issues' ? `${config.issuesOwner}/${config.issuesRepo}` : 'N/A',
   })

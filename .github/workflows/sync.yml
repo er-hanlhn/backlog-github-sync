@@ -6,16 +6,29 @@ on:
     - cron: '0 * * * *'  # Hourly fallback for missed webhooks
   workflow_dispatch: {}
 
-concurrency:
-  group: backlog-sync
-  cancel-in-progress: false
-
 permissions:
   contents: write
 
 jobs:
-  sync:
+  load-projects:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-matrix
+        run: echo "matrix=$(cat sync-projects.json | jq -c '.')" >> $GITHUB_OUTPUT
+
+  sync:
+    needs: load-projects
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ${{ fromJson(needs.load-projects.outputs.matrix) }}
+      fail-fast: false
+    concurrency:
+      group: backlog-sync-${{ matrix.project.name }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
 
@@ -28,20 +41,21 @@ jobs:
 
       - run: npm run build
 
-      - name: Run sync
+      - name: Run sync for ${{ matrix.project.name }}
         run: node dist/src/index.js
         env:
+          PROJECT_NAME: ${{ matrix.project.name }}
           BACKLOG_SPACE: ${{ secrets.BACKLOG_SPACE }}
           BACKLOG_DOMAIN: ${{ secrets.BACKLOG_DOMAIN }}
           BACKLOG_API_KEY: ${{ secrets.BACKLOG_API_KEY }}
-          BACKLOG_PROJECT_ID: ${{ secrets.BACKLOG_PROJECT_ID }}
+          BACKLOG_PROJECT_ID: ${{ matrix.project.backlog_project_id }}
           GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
           PROJECT_OWNER: ${{ vars.PROJECT_OWNER }}
-          PROJECT_NUMBER: ${{ vars.PROJECT_NUMBER }}
-          ISSUES_OWNER: er-hanlhn
-          ISSUES_REPO: hanlhn-team
+          PROJECT_NUMBER: ${{ matrix.project.project_number }}
+          ISSUES_OWNER: ${{ matrix.project.issues_owner }}
+          ISSUES_REPO: ${{ matrix.project.issues_repo }}
           SYNC_MODE: issues
-          FIELD_MAPPING_PATH: config/field-mapping.yml
+          FIELD_MAPPING_PATH: ${{ matrix.project.field_mapping }}
           INITIAL_SYNC_HOURS: ${{ vars.INITIAL_SYNC_HOURS || '720' }}
 
       - name: Commit sync state
@@ -51,8 +65,9 @@ jobs:
           git stash --include-untracked
           git pull --rebase
           git stash pop || true
-          git diff --quiet .sync-state.json || (
-            git add .sync-state.json &&
-            git commit -m "chore: update sync state" &&
+          STATE_FILE=".sync-state-${{ matrix.project.name }}.json"
+          git diff --quiet "$STATE_FILE" || (
+            git add "$STATE_FILE" &&
+            git commit -m "chore: update sync state for ${{ matrix.project.name }}" &&
             git push
           )

@@ -1,0 +1,10 @@
+[
+  {
+    "name": "esim",
+    "backlog_project_id": "YOUR_BACKLOG_PROJECT_ID",
+    "issues_owner": "er-hanlhn",
+    "issues_repo": "hanlhn-team",
+    "project_number": "2",
+    "field_mapping": "config/field-mapping.yml"
+  }
+]
