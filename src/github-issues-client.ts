@@ -61,34 +61,53 @@ function headers(token: string): Record<string, string> {
   }
 }
 
-export async function findExistingIssue(
-  deps: IssuesClientDeps,
-  issueKey: string
-): Promise<GitHubIssueRef | null> {
-  const query = encodeURIComponent(`repo:${deps.owner}/${deps.repo} in:title [${issueKey}]`)
-  const url = `https://api.github.com/search/issues?q=${query}&per_page=1`
+interface GitHubListIssueResponse {
+  readonly id: number
+  readonly number: number
+  readonly node_id: string
+  readonly title: string
+}
 
-  const response = await fetchWithRetry(url, {
-    method: 'GET',
-    headers: headers(deps.token),
-  })
+/**
+ * Fetch all issues from the repo and build a map of issueKey -> GitHubIssueRef.
+ * Uses the List Issues API (5000 req/hr) instead of Search API (30 req/min).
+ * Parses `[ISSUE-KEY]` prefix from issue titles.
+ */
+export async function fetchExistingIssueMap(
+  deps: IssuesClientDeps
+): Promise<ReadonlyMap<string, GitHubIssueRef>> {
+  const issueMap = new Map<string, GitHubIssueRef>()
+  let page = 1
+  const perPage = 100
+  const keyPattern = /^\[([A-Z]+-\d+)\]/
 
-  const data = (await response.json()) as {
-    readonly total_count: number
-    readonly items: ReadonlyArray<GitHubIssueResponse>
-  }
+  while (true) {
+    const url = `https://api.github.com/repos/${deps.owner}/${deps.repo}/issues?state=all&per_page=${perPage}&page=${page}`
 
-  if (data.total_count > 0) {
-    const match = data.items[0]
-    logger.info(`Found existing issue for ${issueKey}: #${match.number}`)
-    return {
-      id: match.id,
-      issueNumber: match.number,
-      nodeId: match.node_id,
+    const response = await fetchWithRetry(url, {
+      method: 'GET',
+      headers: headers(deps.token),
+    })
+
+    const items = (await response.json()) as ReadonlyArray<GitHubListIssueResponse>
+
+    for (const item of items) {
+      const match = keyPattern.exec(item.title)
+      if (match) {
+        issueMap.set(match[1], {
+          id: item.id,
+          issueNumber: item.number,
+          nodeId: item.node_id,
+        })
+      }
     }
+
+    if (items.length < perPage) break
+    page++
   }
 
-  return null
+  logger.info(`Fetched ${issueMap.size} existing issues from ${deps.owner}/${deps.repo}`)
+  return issueMap
 }
 
 export async function createIssue(

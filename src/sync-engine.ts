@@ -17,7 +17,7 @@ import {
 import {
   createIssue,
   updateIssue,
-  findExistingIssue,
+  fetchExistingIssueMap,
   createIssuesClientDeps,
 } from './github-issues-client.js'
 import { getOrCreateMilestone } from './github-milestones.js'
@@ -113,7 +113,8 @@ async function syncTicketIssue(
   state: SyncState,
   config: SyncConfig,
   projectId: string,
-  allIssues: ReadonlyArray<BacklogIssue>
+  allIssues: ReadonlyArray<BacklogIssue>,
+  existingIssues: ReadonlyMap<string, import('./types.js').GitHubIssueRef>
 ): Promise<{ updatedState: SyncState; action: 'created' | 'updated' }> {
   const backlogDeps = createBacklogDeps(config)
   const githubDeps = createGitHubDeps(config)
@@ -157,9 +158,9 @@ async function syncTicketIssue(
 
   let existing = currentState.issueMap[issue.issueKey]
 
-  // Dedup: if not in state, search GitHub for an existing issue by title
+  // Dedup: if not in state, check pre-fetched existing issues map
   if (!existing) {
-    const found = await findExistingIssue(issuesDeps, issue.issueKey)
+    const found = existingIssues.get(issue.issueKey)
     if (found) {
       currentState = setIssueMapping(currentState, issue.issueKey, found)
       existing = found
@@ -276,6 +277,10 @@ export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Pro
   let failed = 0
 
   if (config.syncMode === 'issues') {
+    // Pre-fetch all existing issues for dedup (uses List API, not Search API)
+    const issuesDeps = createIssuesClientDeps(config)
+    const existingIssues = await fetchExistingIssueMap(issuesDeps)
+
     // Resolve hierarchy: parents first, then children
     const { parents, children } = resolveCreationOrder(issues)
 
@@ -307,7 +312,7 @@ export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Pro
     // Sync parents first
     for (const issue of allParents) {
       try {
-        const result = await syncTicketIssue(issue, state, config, projectId, allIssues)
+        const result = await syncTicketIssue(issue, state, config, projectId, allIssues, existingIssues)
         state = result.updatedState
         if (result.action === 'created') created++
         else updated++
@@ -320,7 +325,7 @@ export async function runSync(config: SyncConfig, webhook?: WebhookPayload): Pro
     // Then sync children
     for (const issue of children) {
       try {
-        const result = await syncTicketIssue(issue, state, config, projectId, allIssues)
+        const result = await syncTicketIssue(issue, state, config, projectId, allIssues, existingIssues)
         state = result.updatedState
         if (result.action === 'created') created++
         else updated++
